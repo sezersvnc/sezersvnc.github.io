@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sezer Sevinç</title>
+  <meta name="description" content="Sezer Sevinç — Backend & Veri Geliştirici. Projeler, deneyim ve iletişim.">
+  <meta property="og:title" content="Sezer Sevinç — Backend & Veri Geliştirici">
+  <meta property="og:description" content="Düzce Üniversitesi Bilgisayar Mühendisliği öğrencisi. Projeler, deneyim ve iletişim.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sezersvnc.github.io/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23111'/><text x='16' y='21' font-family='monospace' font-size='14' font-weight='700' fill='%233ddc84' text-anchor='middle'>{}</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">İçeriğe geç</a>
+
+  <div class="app">
+    <!-- ── Kenar çubuğu: endpoint listesi ── -->
+    <aside class="side">
+      <a class="brand" href="#me">
+        <span class="brand__mark" aria-hidden="true">{ }</span>
+        <span class="brand__text"><strong data-bind="fullname"></strong><small>API reference · v1</small></span>
+      </a>
+
+      <div class="base">
+        <span class="base__label">Base URL</span>
+        <code>/v1</code>
+      </div>
+
+      <nav class="endpoints" aria-label="Bölümler">
+        <p class="endpoints__group">Profil</p>
+        <a href="#me"><span class="m m--get">GET</span><code>/me</code></a>
+        <a href="#skills"><span class="m m--get">GET</span><code>/skills</code></a>
+        <p class="endpoints__group">İş</p>
+        <a href="#projects"><span class="m m--get">GET</span><code>/projects</code></a>
+        <a href="#experience"><span class="m m--get">GET</span><code>/experience</code></a>
+        <p class="endpoints__group">İletişim</p>
+        <a href="#contact"><span class="m m--post">POST</span><code>/contact</code></a>
+      </nav>
+
+      <div class="side__foot">
+        <p class="health"><span class="health__dot"></span><span data-bind="availability"></span></p>
+        <div class="side__row">
+          <span class="clock" id="clock"></span>
+          <button class="theme" id="themeToggle" type="button" aria-label="Açık / koyu tema">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main">
+      <!-- GET /me -->
+      <section class="ep" id="me">
+        <div class="ep__line">
+          <span class="m m--get">GET</span><code class="ep__path">/v1/me</code>
+          <span class="ep__status"><span class="ok">200 OK</span> · <span id="latency">—</span></span>
+        </div>
+        <h1 class="hero__name" data-bind="fullname"></h1>
+        <p class="hero__role"><span data-bind="role"></span> — <span data-bind="location"></span></p>
+        <p class="hero__intro" data-bind="intro"></p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="#contact">Mesaj gönder</a>
+          <button class="btn" type="button" id="copyEmail"><span data-bind="email"></span><span class="btn__hint" id="copyHint">kopyala</span></button>
+        </div>
+
+        <div class="ep__grid">
+          <div class="ep__doc">
+            <div class="prose" id="about"></div>
+            <h2 class="label">Yanıt alanları</h2>
+            <div class="fields" id="facts"></div>
+          </div>
+          <div class="code" data-json="me"></div>
+        </div>
+      </section>
+
+      <!-- GET /skills -->
+      <section class="ep" id="skills">
+        <div class="ep__line"><span class="m m--get">GET</span><code class="ep__path">/v1/skills</code></div>
+        <h2 class="ep__title">Kullandığım teknolojiler</h2>
+        <p class="ep__desc">Gruplara ayrılmış hâlde: <code>string[]</code> döner.</p>
+        <div class="ep__grid">
+          <div class="ep__doc"><div class="skills" id="skillList"></div></div>
+          <div class="code" data-json="skills"></div>
+        </div>
+      </section>
+
+      <!-- GET /projects -->
+      <section class="ep" id="projects">
+        <div class="ep__line"><span class="m m--get">GET</span><code class="ep__path" id="projectPath">/v1/projects</code></div>
+        <h2 class="ep__title">Projeler</h2>
+        <p class="ep__desc">Detayını görmek için bir satır seç — istek <code>/v1/projects/:id</code> olarak güncellenir.</p>
+        <div class="ep__grid">
+          <div class="ep__doc">
+            <div class="table" role="listbox" aria-label="Projeler" id="projectTable"></div>
+            <article class="detail" id="projectDetail" aria-live="polite"></article>
+          </div>
+          <div class="code" data-json="project"></div>
+        </div>
+      </section>
+
+      <!-- GET /experience -->
+      <section class="ep" id="experience">
+        <div class="ep__line"><span class="m m--get">GET</span><code class="ep__path">/v1/experience</code></div>
+        <h2 class="ep__title">Deneyim & eğitim</h2>
+        <p class="ep__desc">En yeniden eskiye sıralı.</p>
+        <div class="ep__grid">
+          <div class="ep__doc"><ol class="log" id="log"></ol></div>
+          <div class="code" data-json="experience"></div>
+        </div>
+      </section>
+
+      <!-- POST /contact -->
+      <section class="ep" id="contact">
+        <div class="ep__line"><span class="m m--post">POST</span><code class="ep__path">/v1/contact</code></div>
+        <h2 class="ep__title">Bana yaz</h2>
+        <p class="ep__desc">Bir proje, staj / iş fırsatı ya da sadece merhaba. Alanları doldur, isteği gönder; gövdenin canlı oluştuğunu JSON panelinde görebilirsin.</p>
+
+        <div class="ep__grid">
+          <form class="req" id="mailForm" novalidate>
+            <div class="req__bar">
+              <span class="m m--post">POST</span>
+              <code>/v1/contact</code>
+              <span class="req__type">application/json</span>
+            </div>
+
+            <label class="kv">
+              <span class="kv__key">name<em>Adın</em></span>
+              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ad Soyad" required>
+            </label>
+            <label class="kv">
+              <span class="kv__key">email<em>E-posta</em></span>
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="ornek@mail.com" required>
+            </label>
+            <label class="kv">
+              <span class="kv__key">subject<em>Konu</em></span>
+              <input id="f-subject" name="subject" type="text" placeholder="Ne hakkında?" required>
+            </label>
+            <div class="chips" role="group" aria-label="Hazır konular">
+              <button type="button" data-subject="Staj fırsatı">Staj fırsatı</button>
+              <button type="button" data-subject="İş teklifi">İş teklifi</button>
+              <button type="button" data-subject="Proje">Proje</button>
+              <button type="button" data-subject="Merhaba">Merhaba</button>
+            </div>
+            <label class="kv kv--area">
+              <span class="kv__key">message<em>Mesaj</em></span>
+              <textarea id="f-message" name="message" rows="7" placeholder="Merhaba Sezer, …" required></textarea>
+            </label>
+            <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="req__foot">
+              <button class="btn btn--solid" type="submit" id="sendBtn">İsteği gönder</button>
+              <span class="req__hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+              <span class="req__status" id="mailStatus" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <div class="code" data-json="contact"></div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <span>© <span id="year"></span> <span data-bind="fullname"></span></span>
+        <span class="foot__links" id="footLinks"></span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="content.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
