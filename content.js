@@ -5,7 +5,7 @@
 window.PORTFOLIO = {
   name: "Sezer",
   surname: "Sevinç",
-  role: "Backend & Veri Geliştirici",
+  role: "Backend Geliştirici",
   location: "Düzce, Türkiye",
   timezone: "Europe/Istanbul",
   email: "sezer.svnc67@gmail.com",
